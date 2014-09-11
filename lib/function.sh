@@ -14,9 +14,8 @@ function checkSystem() {
 function checkGroup() {
 	cat /etc/group | grep -q "$1:x:"
 	if [ $? -ne 0 ]; then
-		rs=`groupadd $1`
+		groupadd $1
 		if [ $? -ne 0 ]; then
-			echo "ERROR : $rs" 1>&2
 			return $?
 		fi
 		echo "add group $1 success" 1>&2
@@ -27,9 +26,8 @@ function checkGroup() {
 function addUser() {
 	rs=`id $1 2>&1`
 	if [ $? -ne 0 ]; then
-		rs=`useradd $1`
+		useradd $1 -m -s /bin/bash
 		if [ $? -ne 0 ]; then
-			echo "ERROR : $rs" 1>&2
 			return $?
 		fi
 		echo "add user $1 success" 1>&2
@@ -44,9 +42,8 @@ function addUsertoGroup() {
 	fi
 	id $1 | grep -q "($2)"
 	if [ $? -ne 0 ]; then
-			rs=`usermod -a -G $2 $1 2>&1`
+		usermod -a -G $2 $1 2>&1
 		if [ $? -ne 0 ]; then
-			echo "ERROR : $rs" 1>&2
 			return $?
 		else
 			echo "add $1 to $2 group success" 1>&2
