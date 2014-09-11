@@ -33,8 +33,6 @@ function addUser() {
 			return $?
 		fi
 		echo "add user $1 success" 1>&2
-	else
-		echo "user $1 exist" 1>&2
 	fi
 	return 0
 }
@@ -53,8 +51,6 @@ function addUsertoGroup() {
 		else
 			echo "add $1 to $2 group success" 1>&2
 		fi
-	else
-		echo "user $1 already in $2 group" 1>&2
 	fi
 	return 0
 }
@@ -75,14 +71,13 @@ function addPublicKey() {
 	fi
 	sudo -u $1 cat ${filePath} | grep -q "$2"
 	if [ $? -ne 0 ]; then
-		rs=`sudo -u $1 echo "$2" >> ${filePath}`
+		sudo -u $1 echo "$2" >> ${filePath}
 		if [ $? -ne 0 ]; then
-			echo "ERROR : $rs" 1>&2
+			return $?
 		else
-			echo "insert pulic key to authorized_keys success" 1>&2
+			echo "add pulic key success" 1>&2
 		fi
-	else
-		echo "pulic key already in authorized_keys" 1>&2
 	fi
 	sudo -u $1 chmod 600 ${filePath}
+	return 0
 }
