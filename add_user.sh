@@ -28,6 +28,17 @@ do
 		fi
 	done
 
+	sSudoerFile=/etc/sudoers.d/${user}
+
+	cat /etc/sudoers | grep -q "${user} ALL=(ALL) NOPASSWD: ALL"
+
+	if [ $? -ne 0 ]; then
+		echo "add ${user} into /etc/sudoers"
+		chmod 640 /etc/sudoers
+		echo "${user} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+		chmod 440 /etc/sudoers
+	fi
+
 	while read sPubKey
 	do
 		addPublicKey "$user" "$sPubKey"
@@ -36,6 +47,6 @@ do
 		fi
 	done < "$sDir/user/$user"
 
-	echo " - finished add -"
+	echo " - finished add ${user} -"
 	echo
 done
