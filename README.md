@@ -5,4 +5,4 @@ bash_add_user
 
 
 =============
-需要 sudo 运行 rs_add_user.sh
+需要 sudo 运行 add_user.sh
