@@ -1,6 +1,7 @@
 #!/bin/bash
 
-apt-get install vim git wget
+apt-get update
+apt-get install -y vim git wget
 
 cd ~
 
